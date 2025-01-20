@@ -1,35 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber"
+import { Suspense } from "react"
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function CarShow() {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <OrbitControls target={[0, 0.35, 0]} maxPolarAngle={1.45} />
+
+      <PerspectiveCamera makeDefault fov={50} position={[3, 2, 5]} />
+
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshBasicMaterial color={'red'} />
+      </mesh>
     </>
   )
+}
+
+function App() {
+  return (
+    <Suspense fallback={null}>
+      <Canvas shadows>
+        <CarShow />
+      </Canvas>
+    </Suspense>
+  ); 
 }
 
 export default App
