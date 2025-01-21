@@ -1,17 +1,12 @@
 import { useEffect } from "react";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
-import { useGLTF } from "@react-three/drei";
 
 export const Car = () => {
   const gltf = useLoader(
     GLTFLoader,
-    process.env.PUBLIC_URL + "models/car/scene.gltf"
+    "models/car/Corvette.glb"
   );
-
-  // const gltf = useGLTF('/models/car/scene.gltf')
-
-  // console.log(gltf)
 
   useEffect(() => {
     if (gltf && gltf.scene) {
@@ -27,6 +22,12 @@ export const Car = () => {
       });
     }
   }, [gltf]);
+
+  // useEffect(() => {
+  //     gltf.scene.scale.set(1, 1, 1);
+  //     gltf.scene.position.set(0, 2, 0);
+  //     // Apply rules for children of the gltf model, like the wheels, body, doors etc...
+  // }, [gltf]);
 
   return gltf ? <primitive object={gltf.scene} /> : null;
 };

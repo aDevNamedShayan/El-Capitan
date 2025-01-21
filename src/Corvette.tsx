@@ -9,7 +9,7 @@ Title: Chevrolet Corvette (C7)
 import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 
-export function Model(props) {
+export function Corvette(props) {
   const { nodes, materials } = useGLTF("/models/car/scene.glb");
   return (
     <group {...props} dispose={null}>
