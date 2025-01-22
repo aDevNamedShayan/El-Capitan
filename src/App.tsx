@@ -18,6 +18,7 @@ import {
   EffectComposer,
 } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
+import { FloatingGrid } from "./FloatingGrid";
 
 const CarShow = () => {
   return (
@@ -39,6 +40,7 @@ const CarShow = () => {
 
       <Rings />
       <Boxes />
+      <FloatingGrid />
 
       {/* <Corvette scale={[0.005, 0.005, 0.005]} position={[0, -0.035, 0]} /> */}
 
