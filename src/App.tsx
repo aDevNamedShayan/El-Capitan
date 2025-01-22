@@ -29,14 +29,14 @@ const CarShow = () => {
 
       <color args={[0, 0, 0]} attach="background" />
 
-      {/* <CubeCamera resolution={256} frames={Infinity}>
+      <CubeCamera resolution={256} frames={Infinity}>
         {(texture) => (
           <>
             <Environment map={texture} />
             <Car />
           </>
         )}
-      </CubeCamera> */}
+      </CubeCamera>
 
       <Rings />
       <Boxes />
@@ -70,7 +70,7 @@ const CarShow = () => {
         {/* <DepthOfField focusDistance={0.0035} focalLength={0.01} bokehScale={3} height={480} /> */}
         <Bloom
           blendFunction={BlendFunction.ADD}
-          intensity={1.3}
+          intensity={0.3} //Changed from 1.3
           width={300}
           height={300}
           kernelSize={5}
