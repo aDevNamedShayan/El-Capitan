@@ -1,14 +1,15 @@
 import {
+  CameraControls,
   CubeCamera,
   Environment,
   OrbitControls,
   PerspectiveCamera,
+  PointerLockControls,
 } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { Suspense } from "react";
+import { Canvas, useThree } from "@react-three/fiber";
+import { Suspense, useEffect, useRef } from "react";
 import { Ground } from "./Ground";
-import { Car } from "./Car";
-import { Corvette } from "./Corvette";
+import { CorvetteUnused } from "./Corvette";
 import { Rings } from "./Rings";
 import { Boxes } from "./Boxes";
 import {
@@ -19,13 +20,58 @@ import {
 } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import { FloatingGrid } from "./FloatingGrid";
+import { Corvette } from "./CarComponents/Corvette";
+import { Mustang } from "./CarComponents/Mustang";
+import { Vector3 } from "three";
+import * as THREE from "three";
 
 const CarShow = () => {
+  // const cameraRef = useRef();
+  // const { set, camera } = useThree();
+
+  // useEffect(() => {
+  //   //   cameraRef.current?.lookAt(10, 20, 0);
+  //   if (camera) {
+  //     camera.lookAt(30, 20, 20);
+  //   }
+  // }, [camera]);
+
+  // const LookAt = new Vector3(0, 0, 0);
+
+  const cameraControlsRef = useRef<CameraControls>(null);
+  // const fppRef = useRef(null);
+
+  useEffect(() => {
+    //cameraControlsRef.current?.rotate(1, 0, false)
+    cameraControlsRef.current?.setPosition(0, 0.8, 0, true)
+    // cameraControlsRef.current?.lookInDirectionOf(0, 0, 200, true);
+    // fppRef.current?.position(0, 0.8, 5, true)
+  }, []);
   return (
     <>
-      <OrbitControls target={[0, 0.35, 0]} maxPolarAngle={1.45} />
+      {/* <OrbitControls
+        // target={[0, 0, 0]}
+        maxPolarAngle={1.45}
+      /> */}
 
-      <PerspectiveCamera makeDefault fov={50} position={[3, 2, 5]} />
+      <CameraControls
+        enabled={true}
+        ref={cameraControlsRef}
+        // setTarget={new}
+      />
+
+      {/* <PerspectiveCamera makeDefault fov={50} position={[3, 2, 5]} /> */}
+      <PerspectiveCamera
+        // ref={cameraRef}
+        makeDefault
+        fov={50}
+        position={[3, 2, 5]}
+        // rotation={[50, 50, -50]}
+        // rotateX={3}
+        // lookAt={new THREE.Vector3(0, 0, 0)}
+      />
+
+      {/* <PointerLockControls ref={fppRef}/> */}
 
       <color args={[0, 0, 0]} attach="background" />
 
@@ -33,7 +79,8 @@ const CarShow = () => {
         {(texture) => (
           <>
             <Environment map={texture} />
-            <Car />
+            <Mustang />
+            {/* <Corvette /> */}
           </>
         )}
       </CubeCamera>
@@ -42,7 +89,7 @@ const CarShow = () => {
       <Boxes />
       <FloatingGrid />
 
-      {/* <Corvette scale={[0.005, 0.005, 0.005]} position={[0, -0.035, 0]} /> */}
+      {/* <CorvetteUnused scale={[0.005, 0.005, 0.005]} position={[0, -0.035, 0]} /> */}
 
       <spotLight
         color={[1, 0.25, 0.7]}
@@ -66,9 +113,9 @@ const CarShow = () => {
 
       <Ground />
 
-      <EffectComposer>
-        {/* <DepthOfField focusDistance={0.0035} focalLength={0.01} bokehScale={3} height={480} /> */}
-        <Bloom
+      {/* <EffectComposer> */}
+      {/* <DepthOfField focusDistance={0.0035} focalLength={0.01} bokehScale={3} height={480} /> */}
+      {/* <Bloom
           blendFunction={BlendFunction.ADD}
           intensity={0.3} //Changed from 1.3
           width={300}
@@ -81,15 +128,37 @@ const CarShow = () => {
           blendFunction={BlendFunction.NORMAL}
           offset={[0.0005, 0.0012]}
         />
-      </EffectComposer>
+      </EffectComposer> */}
     </>
   );
 };
 
 const App = () => {
   return (
-    <Suspense fallback={null}>
-      <Canvas shadows>
+    <Suspense fallback={<div>Wait</div>}>
+      <Canvas
+        shadows
+        onCreated={({ camera, gl, scene }) => {
+        // gl.setPixelRatio(window.devicePixelRatio);
+        // gl.outputEncoding = sRGBEncoding;
+        // gl.physicallyCorrectLights = true;
+        // gl.shadowMap.enabled = true;
+        // gl.shadowMap.type = PCFSoftShadowMap;
+        // gl.toneMapping = ACESFilmicToneMapping;
+        console.log({ camera });
+        // const yAxis = new Vector3(0, 1, 0);
+        // const xAxis = new Vector3(1, 0, 0);
+        // camera.setRotationFromAxisAngle(yAxis, 60);
+        // camera.lookAt([0, 50, 0]);
+        // camera.rotateX(100);
+        // camera.rotateY(10);
+        // camera.rotateZ(10);
+
+        // camera.rotateY(100);
+        // camera.updateProjectionMatrix();
+
+        }}
+      >
         <CarShow />
       </Canvas>
     </Suspense>
