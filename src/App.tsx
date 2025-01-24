@@ -2,6 +2,8 @@ import {
   CameraControls,
   CubeCamera,
   Environment,
+  Float,
+  Loader,
   OrbitControls,
   PerspectiveCamera,
   PointerLockControls,
@@ -75,15 +77,22 @@ const CarShow = () => {
 
       <color args={[0, 0, 0]} attach="background" />
 
-      <CubeCamera resolution={256} frames={Infinity}>
-        {(texture) => (
-          <>
-            <Environment map={texture} />
-            <Mustang />
-            {/* <Corvette /> */}
-          </>
-        )}
-      </CubeCamera>
+      <Float
+        position={[0, 0.3, 0]}
+        speed={2}
+        rotationIntensity={1}
+        floatIntensity={2}
+      >
+        <CubeCamera resolution={256} frames={Infinity}>
+          {(texture) => (
+            <>
+              <Environment map={texture} />
+              <Mustang />
+              {/* <Corvette /> */}
+            </>
+          )}
+        </CubeCamera>
+      </Float>
 
       <Rings />
       <Boxes />
@@ -134,8 +143,8 @@ const CarShow = () => {
 };
 
 const App = () => {
-  return (
-    <Suspense fallback={<div>Wait</div>}>
+  return (<>
+    <Suspense fallback={null}>
       <Canvas
         shadows
         onCreated={({ camera, gl, scene }) => {
@@ -162,6 +171,8 @@ const App = () => {
         <CarShow />
       </Canvas>
     </Suspense>
+    <Loader />
+    </>
   );
 };
 
