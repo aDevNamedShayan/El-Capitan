@@ -13,7 +13,6 @@ import {
 import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { Ground } from "./Ground";
-import { CorvetteUnused } from "./Corvette";
 import { Rings } from "./Rings";
 import { Boxes } from "./Boxes";
 import {
@@ -67,7 +66,7 @@ const CarShow = () => {
   // const LookAt = new Vector3(0, 0, 0);
 
   const cameraControlsRef = useRef<CameraControls>(null);
-  const PLControlsRef = useRef(null);
+  const PLControlsRef = useRef<any>(null);
 
   // useEffect(() => {
   //cameraControlsRef.current?.rotate(1, 0, false)
@@ -82,14 +81,16 @@ const CarShow = () => {
     // camera.position.set(0, 0, 5);
     // camera.lookAt(0, 0, 0);
     // if(cameraControlsRef.current) cameraControlsRef.current.enabled = false;
-    // camera.position.set(0.45, 1.0, -0.5);
-    // camera.lookAt(0.3, 1, 7);
+    // camera.position.set(0.15, 0.798, 0.04);
+    // camera.lookAt(-1.25, 0.2, 7);
     // camera.updateProjectionMatrix();
   }, [camera, cameraControlsRef]);
 
+  console.log(cameraControlsRef.current);
   console.log(PLControlsRef.current);
 
   const [PLCEnable, setPLCEnable] = useState(false);
+  console.log(PLCEnable)
 
   return (
     <>
@@ -119,9 +120,9 @@ const CarShow = () => {
 
       <PointerLockControls
         enabled={PLCEnable}
+        // onUnlock={()=> alert("moz")}
         isLocked={true}
-        // selector="clickable"
-
+        selector="#plcontrol"
         ref={PLControlsRef}
         maxPolarAngle={Math.PI - 0.0001}
         minPolarAngle={0.0001}
@@ -177,15 +178,16 @@ const CarShow = () => {
       <mesh
         position={[2.5, 1, 0]}
         scale={[3, 3, 3]}
-        // onClick={() => {camera.position.x = 3; camera.position.y = 2; camera.position.z = 7;}}
         onClick={() => {
           if (cameraControlsRef.current)
             cameraControlsRef.current.enabled = false;
           setPLCEnable(true);
-          if (PLControlsRef.current) {
-            // PLControlsRef.current.connect();
-            // PLControlsRef.current.isLocked = true;
-          }
+          setTimeout(() => {
+            if (PLControlsRef.current) {
+              // PLControlsRef.current.connect();
+              PLControlsRef.current.lock();
+            }
+          }, 250);
           camera.position.set(0.45, 1.0, -0.5);
           camera.lookAt(0.3, 1, 7);
           camera.updateProjectionMatrix();
@@ -195,11 +197,35 @@ const CarShow = () => {
         <meshStandardMaterial attach="material" color="purple" />
       </mesh>
 
-      <mesh name="clickable" position={[0, 0.925, 0.4]} scale={[1, 1, 1]}>
+      <mesh
+        // name="clickable"
+        position={[0, 0.925, 0.4]}
+        scale={[1, 1, 1]}
+        onClick={() => {
+          camera.position.set(0.15, 0.798, 0.04);
+          camera.lookAt(-1.25, 0.2, 7);
+          camera.updateProjectionMatrix();
+          // PLControlsRef.current.connect();
+          setPLCEnable(false);
+          setTimeout(() => {
+            if (PLControlsRef.current) {
+              PLControlsRef.current.unlock();
+              // PLControlsRef.current.disconect();
+              // PLControlsRef.current.dispose();
+            }
+          }, 250);
+        }}
+      >
         <boxGeometry attach="geometry" args={[0.1, 0.1, 0.1]} />
         <meshStandardMaterial attach="material" color="orange" />
       </mesh>
 
+      <Html>
+        <div className="w-[30rem] h-28 bg-amber-300 translate-x-[-45rem] translate-y-[-20rem]">
+          <button id="plcontrol" className='size-3 bg-black cursor-pointer'></button>
+        </div>
+      </Html>
+      
       {/* <mesh
         position={[0.1, 0.78, 0.196]}
         scale={[1.9, 1.2, 0.2]}
@@ -228,7 +254,11 @@ const CarShow = () => {
         </Html>
       </mesh> */}
 
-      <Monitor scale={[0.58, 0.58, 0.5]} position={[0.1, 0.73, 0.256]} rotation={[-0.2, 2.954, 0.04]}/>
+      <Monitor
+        scale={[0.58, 0.58, 0.5]}
+        position={[0.1, 0.73, 0.256]}
+        rotation={[-0.2, 2.954, 0.04]}
+      />
 
       {/* <EffectComposer> */}
       {/* <DepthOfField focusDistance={0.0035} focalLength={0.01} bokehScale={3} height={480} /> */}

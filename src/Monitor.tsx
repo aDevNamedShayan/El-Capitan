@@ -76,8 +76,108 @@ export function Monitor(props: JSX.IntrinsicElements['group']) {
             rotation={[-Math.PI / 2, 0, 0]}
             scale={100}
           >
-            <Html className='w-[490px] h-[335px] bg-[#f0f0f0] rounded-[45px] overflow-y-auto p-0' rotation-x={1.25} position={[0, -4.33, 4.62]} transform occlude >
-              <div className='p-10 w-[400px] h-[432px] scale-50 origin-top-left'>NIGGA</div>
+            <Html className='w-[490px] h-[335px] bg-[#f0f0f0] rounded-[45px] overflow-y-auto p-0 HTML' rotation-x={1.25} position={[0, -4.33, 4.62]} transform occlude >
+              {/* <div className='p-10 w-[400px] h-[432px] scale-50 origin-top-left'>NIGGA</div> */}
+                <section className="w-full h-full overflow-y-auto">
+                  <div className="container mx-auto text-center w-full ">
+                    <div className="flex flex-col lg:flex-row items-center justify-start lg:justify-evenly mb-10">
+                      {/* Stats Section */}
+                      <div className="w-[19rem] order-2 lg:order-1 flex gap-4 flex-wrap justify-start mb-5">
+                        <div className="flex items-center mx-4">
+                          {/* <Avatar.Group>
+                            <Avatar src={Avatar1} />
+                            <Avatar src={Avatar2} />
+                            <Avatar src={Avatar3} />
+                          </Avatar.Group> */}
+                          <span className="">
+                            {/* +{digitsEnToFa(`${landingReportInfo.studentCount}`)} دانشجوی */}
+                            فعال در دوره
+                          </span>
+                        </div>
+                        <div className="flex relative right-4 lg:right-0 items-center mx-4">
+                          {/* <Avatar.Group>
+                            <Avatar src={Avatar4} />
+                            <Avatar src={Avatar5} />
+                            <Avatar src={Avatar6} />
+                          </Avatar.Group> */}
+                          <span className="">
+                            {/* +{digitsEnToFa(`${landingReportInfo.teacherCount}`)} اساتید برتر */}
+                            جهان
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-72 order-1 lg:order-2 justify-center flex flex-wrap my-5">
+                        <div>
+                          <div className=" text-4xl font-bold mb-4 ">
+                            آموزش مدرن
+                          </div>
+                          <h1 className=" text-4xl font-bold mb-4 ">
+                            پیشرفت سریع
+                          </h1>
+                        </div>
+                        <div>
+                          <p className=" text-base pt-4">
+                            آکادمی آموزش تخصصی برنامه نویسی بحر
+                          </p>
+                          <p className=" text-base mb-6">
+                            از کودکان تا بزرگسال
+                          </p>
+                        </div>
+                      </div>
+                      <div className="w-72 flex order-3 flex-wrap flex-col">
+                        <div>
+                          <h3 className="lg:flex justify-center text-base/6 mr-2 ">
+                            همین حالا
+                            <br />
+                            شروع کن به یادگیری!
+                          </h3>
+                          <h3 className="mr-2"></h3>
+                        </div>
+                        {/* <Link to={"/courses"}> */}
+                          <button className="mb-8 mt-2 rounded-full bg-gray-900 text-white dark:bg-blue-500 px-5 py-1.5">
+                            جدیدترین دوره‌ها
+                          </button>
+                        {/* </Link> */}
+                      </div>
+                    </div>
+
+                    {/*Course icons timeline) */}
+
+                    <div className="flex justify-center w-full items-center">
+                      <div className="relative w-full">
+                        {/* Dots and Icons */}
+                        <div className="flex justify-around items-center relative">
+                          {/* {[
+                            { src: Figma, alt: "Figma", className: "animate-icon-5" },
+                            { src: ReactPic, alt: "React", className: "animate-icon-4" },
+                            {
+                              src: JavaScript,
+                              alt: "JavaScript",
+                              className: "animate-icon-3",
+                            },
+                            { src: CSS3, alt: "CSS3", className: "animate-icon-2" },
+                            { src: HTML5, alt: "HTML5", className: "animate-icon-1" },
+                          ].map((item, index) => (
+                            <div key={index} className="flex flex-col items-center">
+                              <img
+                                src={item.src}
+                                alt={item.alt}
+                                className={`size-28 transition-transform ${item.className}`}
+                              />
+                              <div
+                                className={`flex items-center justify-center size-3.5 rounded-full z-20 bg-gray-300 ${`animate-dot-${
+                                  index + 1
+                                }`}`}
+                              >
+                                <div className="size-1.5 rounded-full bg-white"></div>
+                              </div>
+                            </div>
+                          ))} */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
             </Html>
           </mesh>
         </group>
