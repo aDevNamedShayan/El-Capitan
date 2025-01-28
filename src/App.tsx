@@ -9,9 +9,17 @@ import {
   PerspectiveCamera,
   PointerLockControls,
   PointerLockControlsProps,
+  useHelper,
 } from "@react-three/drei";
 import { Canvas, useThree } from "@react-three/fiber";
-import { Suspense, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  Suspense,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Ground } from "./Ground";
 import { Rings } from "./Rings";
 import { Boxes } from "./Boxes";
@@ -29,6 +37,7 @@ import { Vector3 } from "three";
 import * as THREE from "three";
 import { useSpring } from "@react-spring/three";
 import { Monitor } from "./Monitor";
+import { Cat } from "./Cat";
 
 function Controls() {
   const { gl, camera } = useThree();
@@ -52,7 +61,11 @@ function Controls() {
   );
 }
 
-const CarShow = () => {
+const CarShow = ({
+  setIsDriving,
+}: {
+  setIsDriving: Dispatch<SetStateAction<boolean>>;
+}) => {
   // const cameraRef = useRef();
   // const { set, camera } = useThree();
 
@@ -90,7 +103,13 @@ const CarShow = () => {
   console.log(PLControlsRef.current);
 
   const [PLCEnable, setPLCEnable] = useState(false);
-  console.log(PLCEnable)
+  console.log(PLCEnable);
+
+  const [isMonitorOn, setIsMonitorOn] = useState(false);
+
+  const light = useRef<any>()
+
+  useHelper(light, THREE.SpotLightHelper, 'cyan')
 
   return (
     <>
@@ -118,15 +137,16 @@ const CarShow = () => {
         // lookAt={new THREE.Vector3(0, 0, 0)}
       />
 
-      <PointerLockControls
+      {/* fuck this shit💩👇 */}
+      {/* <PointerLockControls
         enabled={PLCEnable}
         // onUnlock={()=> alert("moz")}
         isLocked={true}
         selector="#plcontrol"
         ref={PLControlsRef}
-        maxPolarAngle={Math.PI - 0.0001}
-        minPolarAngle={0.0001}
-      />
+        // maxPolarAngle={Math.PI - 0.0001}
+        // minPolarAngle={0.0001}
+      /> */}
 
       <color args={[0, 0, 0]} attach="background" />
 
@@ -150,6 +170,15 @@ const CarShow = () => {
       <Rings />
       <Boxes />
       <FloatingGrid />
+      <Float
+        // position={[0, 0.3, 0]}
+        speed={8}
+        rotationIntensity={0}
+        floatIntensity={0.2}
+        floatingRange={[0.05, -0.05]}
+      >
+        <Cat />
+      </Float>
 
       {/* <CorvetteUnused scale={[0.005, 0.005, 0.005]} position={[0, -0.035, 0]} /> */}
 
@@ -173,59 +202,150 @@ const CarShow = () => {
         shadow-bias={-0.0001}
       />
 
+      <spotLight
+        color={[0.14, 0.5, 1]}
+        intensity={1200}
+        angle={0.6}
+        penumbra={0.5}
+        position={[0, 5, -5]}
+        castShadow
+        shadow-bias={-0.0001}
+      />
+
+      <spotLight
+        color={[1, 0.25, 0.7]}
+        intensity={1200}
+        angle={0.6}
+        penumbra={0.5}
+        position={[0, 5, 5]}
+        castShadow
+        shadow-bias={-0.0001}
+      />
+
+      {/* Car's Interior Light */}
+      <spotLight
+        ref={light}
+        color={[1, 0.89, 0.4]}
+        intensity={3}
+        angle={1.8}
+        penumbra={1}
+        position={[0, 1.21, 0]}
+        castShadow
+        shadow-bias={-0.0001}
+      />
+
       <Ground />
 
+      {/* Door Handle Mesh */}
       <mesh
-        position={[2.5, 1, 0]}
-        scale={[3, 3, 3]}
+        position={[0.88, 0.73, -0.57]}
+        scale={[0.25, 2, 4]}
+        visible={false}
         onClick={() => {
-          if (cameraControlsRef.current)
-            cameraControlsRef.current.enabled = false;
-          setPLCEnable(true);
-          setTimeout(() => {
-            if (PLControlsRef.current) {
-              // PLControlsRef.current.connect();
-              PLControlsRef.current.lock();
-            }
-          }, 250);
-          camera.position.set(0.45, 1.0, -0.5);
-          camera.lookAt(0.3, 1, 7);
-          camera.updateProjectionMatrix();
+          if (cameraControlsRef.current) {
+            // cameraControlsRef.current.setPosition(0.45, 1.0, -0.5)
+            // cameraControlsRef.current.setOrbitPoint(0.45, 1.0, -0.5)
+            cameraControlsRef.current.setLookAt(
+              0.45,
+              1.0,
+              -0.5,
+              0.45,
+              1.0,
+              -0.4,
+              true
+            );
+            cameraControlsRef.current.smoothTime = 1.6
+            // cameraControlsRef.current.enabled = false;
+          }
+          // setTimeout(() => {
+          //   cameraControlsRef.current.enabled = true;
+          // }, 500);
+          // setPLCEnable(true);
+          // setTimeout(() => {
+          //   if (PLControlsRef.current) {
+          //     // PLControlsRef.current.connect();
+          //     PLControlsRef.current.lock();
+          //   }
+          // }, 250);
+          // camera.position.set(0.45, 1.0, -0.5);
+          // camera.lookAt(0.3, 1, 7);
+          // controls.target(0.45, 1.0, -0.5);!!!!!!!!!!!!!!!!!!!!!!!!!
+          // camera.updateProjectionMatrix();
+          setIsDriving(true);
         }}
       >
         <boxGeometry attach="geometry" args={[0.1, 0.1, 0.1]} />
-        <meshStandardMaterial attach="material" color="purple" />
+        <meshStandardMaterial attach="material" color="yellow" />
       </mesh>
 
+      {/* Monitor Enter Cat Mesh */}
       <mesh
-        // name="clickable"
-        position={[0, 0.925, 0.4]}
+        position={[0.15, 0.96, 0.4]}
         scale={[1, 1, 1]}
+        visible={false}
         onClick={() => {
+          if (cameraControlsRef.current) {
+            cameraControlsRef.current.enabled = false;
+          }
           camera.position.set(0.15, 0.798, 0.04);
           camera.lookAt(-1.25, 0.2, 7);
           camera.updateProjectionMatrix();
-          // PLControlsRef.current.connect();
-          setPLCEnable(false);
-          setTimeout(() => {
-            if (PLControlsRef.current) {
-              PLControlsRef.current.unlock();
-              // PLControlsRef.current.disconect();
-              // PLControlsRef.current.dispose();
-            }
-          }, 250);
         }}
       >
         <boxGeometry attach="geometry" args={[0.1, 0.1, 0.1]} />
         <meshStandardMaterial attach="material" color="orange" />
       </mesh>
 
-      <Html>
-        <div className="w-[30rem] h-28 bg-amber-300 translate-x-[-45rem] translate-y-[-20rem]">
-          <button id="plcontrol" className='size-3 bg-black cursor-pointer'></button>
-        </div>
-      </Html>
-      
+      {/* Monitor Back Button Mesh  */}
+      <mesh
+        // name="clickable"
+        position={[0.22, 0.825, 0.21]}
+        scale={[0.2, 0.2, 0.2]}
+        onClick={() => {
+          if (cameraControlsRef.current) {
+            cameraControlsRef.current.enabled = true;
+          }
+          // camera.position.set(0.15, 0.798, 0.04);
+          // camera.lookAt(-1.25, 0.2, 7);
+          // camera.updateProjectionMatrix();
+        }}
+      >
+        <boxGeometry attach="geometry" args={[0.1, 0.1, 0.1]} />
+        <meshStandardMaterial attach="material" color="orange" />
+      </mesh>
+
+      {/* Monitor On/Off Button Mesh  */}
+      <mesh
+        // name="clickable"
+        position={[0.22, 0.8, 0.21]}
+        scale={[0.2, 0.2, 0.2]}
+        onClick={() => {
+          setIsMonitorOn(!isMonitorOn);
+        }}
+      >
+        <boxGeometry attach="geometry" args={[0.1, 0.1, 0.1]} />
+        <meshStandardMaterial attach="material" color="green" />
+      </mesh>
+
+      {/* Exit Car Mesh */}
+      <mesh
+        position={[0.81, 0.75, 0.02]}
+        scale={[0.25, 2, 9]}
+        visible={false}
+        onClick={() => {
+          if (cameraControlsRef.current) {
+            // cameraControlsRef.current.setPosition(0.45, 1.0, -0.5)
+            // cameraControlsRef.current.setOrbitPoint(0.45, 1.0, -0.5)
+            cameraControlsRef.current.setLookAt(3, 2, 5, 0, 0, 0, true);
+            // cameraControlsRef.current.enabled = false;
+          }
+          setIsDriving(false);
+        }}
+      >
+        <boxGeometry attach="geometry" args={[0.1, 0.1, 0.1]} />
+        <meshStandardMaterial attach="material" color="red" />
+      </mesh>
+
       {/* <mesh
         position={[0.1, 0.78, 0.196]}
         scale={[1.9, 1.2, 0.2]}
@@ -258,6 +378,7 @@ const CarShow = () => {
         scale={[0.58, 0.58, 0.5]}
         position={[0.1, 0.73, 0.256]}
         rotation={[-0.2, 2.954, 0.04]}
+        isMonitorOn={isMonitorOn}
       />
 
       {/* <EffectComposer> */}
@@ -281,11 +402,25 @@ const CarShow = () => {
 };
 
 const App = () => {
+  const [isDriving, setIsDriving] = useState(false);
   return (
     <>
       <Suspense fallback={null}>
+        {/* <div className="w-[5rem] h-12 bg-amber-300 absolute z-10 flex justify-center items-center">
+          <button
+            id="plcontrol"
+            className={`size-6 text-base/[0rem] text-white bg-black cursor-pointer ${
+              isDriving ? "" : "hidden"
+            }`}
+          >
+            D
+          </button>
+        </div> */}
         <Canvas
-          shadows
+          shadows 
+          // colorManagement 
+          // concurrent 
+          // shadowMap
           // onCreated={({ camera, gl, scene }) => {
           // gl.setPixelRatio(window.devicePixelRatio);
           // gl.outputEncoding = sRGBEncoding;
@@ -321,7 +456,7 @@ const App = () => {
               }}
             >3D</div>
           </Html> */}
-          <CarShow />
+          <CarShow setIsDriving={setIsDriving} />
         </Canvas>
       </Suspense>
       <Loader />

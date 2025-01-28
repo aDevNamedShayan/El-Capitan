@@ -12,13 +12,13 @@ export const Mustang = () => {
     if (gltf && gltf.scene) {
       gltf.scene.scale.set(0.4, 0.4, 0.4);
       gltf.scene.position.set(0, -0.035, -1.5);
-      // gltf.scene.traverse((object: any) => {
-      //   if (object.isMesh) {
-      //     object.castShadow = true;
-      //     object.receiveShadow = true;
-      //     object.material.envMapIntensity = 20;
-      //   }
-      // });
+        gltf.scene.traverse((object: any) => {
+          if (object.isMesh) {
+            object.castShadow = true;
+            object.receiveShadow = true;
+            object.material.envMapIntensity = 10;
+          }
+        });
     }
   }, [gltf]);
   
